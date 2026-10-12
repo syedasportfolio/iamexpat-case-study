@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Pregnancy Guide Concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,600;0,700;1,400&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<style>
+/* Layout: IamExpat-style article column. Answer box, week strip, numbered steps (summary always visible, full detail on tap), "What next". Single light look to match IamExpat's live site. */
+:root{
+  color-scheme:light;
+  --bg:#FFFFFF; --ink:#000000; --muted:#555555; --line:#E6E1DE;
+  --peach:#F5CFC2; --peach-soft:#FBEDE8; --yellow:#FFEA5B;
+  --link:#000000; --note:#5B2A86; --note-soft:#EEE6F6;
+  --serif:"Newsreader", Georgia, "Times New Roman", serif;
+  --sans:"Hanken Grotesk", "Helvetica Neue", Arial, system-ui, sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;padding-inline:16px;padding-block:0 56px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+a{color:var(--link);text-decoration:underline;text-decoration-color:var(--peach);text-decoration-thickness:3px;text-underline-offset:3px}
+a:hover{text-decoration-color:var(--ink)}
+a:focus-visible,summary:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:6px}
+h1,h2{font-family:var(--serif);font-weight:500;text-wrap:balance;line-height:1.1;margin:0}
+h1{font-size:clamp(2.1rem,7vw,3.1rem);letter-spacing:-.01em}
+h2{font-size:1.65rem}
+h3,h4{font-family:var(--sans);margin:0;line-height:1.3}
+p{margin:0}
+
+/* concept bar */
+.concept{margin-inline:-16px;padding:10px 16px;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;font-size:.85rem}
+.concept b{color:var(--yellow)}
+.concept .backlink{color:var(--bg);font-weight:700;text-decoration-color:var(--yellow);flex-basis:100%}
+.toggle{font:inherit;font-weight:700;color:var(--ink);background:var(--yellow);border:0;border-radius:6px;padding:7px 14px;cursor:pointer}
+
+header{display:flex;flex-direction:column;gap:14px}
+.crumbs{font-size:.85rem;color:var(--muted)}
+.byline{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:.88rem;color:var(--muted)}
+.lede{font-size:1.08rem}
+
+/* answer box */
+.answer{background:var(--peach);border-radius:6px;padding:22px 20px;display:flex;flex-direction:column;gap:12px}
+.answer h2{font-size:1.35rem}
+.answer ol{margin:0;padding-left:1.25em;display:flex;flex-direction:column;gap:8px}
+.answer li::marker{font-weight:700}
+
+/* jump links */
+.jump{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.jump a{text-decoration:none;border:1px solid var(--ink);border-radius:999px;padding:4px 12px;font-size:.88rem}
+.jump a:hover{background:var(--peach)}
+.jump button{font:inherit;font-size:.88rem;font-weight:700;background:var(--ink);color:var(--bg);border:0;border-radius:6px;padding:6px 12px;cursor:pointer}
+[id^="st"],#docs{scroll-margin-top:16px}
+
+/* documents box */
+.docs{border:2px solid var(--ink);border-radius:6px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.docs ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.docs li{display:grid;grid-template-columns:22px 1fr;gap:10px}
+.docs li::before{content:"";width:16px;height:16px;border:2px solid var(--ink);border-radius:3px;margin-top:4px}
+.docs small{color:var(--muted);font-size:.85rem}
+
+/* week strip */
+.strip{display:flex;flex-direction:column;gap:12px}
+.track{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.track ol{list-style:none;margin:0;padding:0 0 6px;display:grid;grid-template-columns:repeat(6,minmax(110px,1fr));gap:8px;min-width:680px}
+.track li{border-top:4px solid var(--ink);padding:10px 4px 0;font-size:.88rem;line-height:1.4}
+.track b{display:inline-block;background:var(--yellow);padding:1px 6px;border-radius:4px;font-size:.78rem;margin-bottom:6px}
+
+/* steps */
+.stage{display:flex;flex-direction:column;gap:12px}
+.stage-head{display:flex;flex-direction:column;gap:2px}
+.stage-head span{font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+details{border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+details[open]{border-color:var(--ink)}
+summary{list-style:none;cursor:pointer;padding:16px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 14px;align-items:start;background:var(--bg);border-radius:6px}
+summary::-webkit-details-marker{display:none}
+details[open]>summary{position:sticky;top:env(safe-area-inset-top,0px);z-index:3;border-bottom:1px solid var(--line);border-radius:6px 6px 0 0}
+.num{grid-row:span 3;width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--bg);font-weight:700;display:grid;place-items:center;font-size:.9rem}
+summary h3{font-size:1.08rem;font-weight:700}
+.when{justify-self:start;font-size:.78rem;font-weight:700;background:var(--yellow);padding:1px 7px;border-radius:4px}
+.gist{grid-column:2;color:var(--muted);font-size:.95rem}
+.chev{grid-row:span 3;width:22px;height:22px;margin-top:5px;transition:transform .2s}
+.chev path{fill:none;stroke:var(--ink);stroke-width:2}
+details[open] .chev{transform:rotate(180deg)}
+.more{grid-column:2;font-size:.82rem;font-weight:700}
+details[open] .more{display:none}
+.body{padding:16px 16px 20px 62px;display:flex;flex-direction:column;gap:12px}
+.body h4{font-size:.98rem;margin-top:6px}
+.body ul{margin:0;padding-left:1.15em;display:flex;flex-direction:column;gap:4px}
+.terms{background:var(--peach-soft);border-radius:6px;padding:10px 12px;font-size:.92rem}
+.src{font-size:.88rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:12px}
+
+/* what next */
+.next{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.next a{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-radius:6px;padding:14px 16px;text-decoration:none}
+.next a:hover{border-color:var(--ink)}
+.next a b{font-size:1rem}
+.next a span{font-size:.88rem;color:var(--muted)}
+.next .cta{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.next .cta span{color:#dddddd}
+
+.helpful{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-weight:700}
+.helpful span{border:1px solid var(--ink);border-radius:6px;padding:4px 14px;font-weight:400}
+footer{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:6px}
+
+/* "Show what changed" annotations */
+[data-note]{position:relative}
+.annotate [data-note]{outline:2px dashed var(--note);outline-offset:6px;border-radius:6px}
+.annotate [data-note]::before{content:attr(data-note);position:absolute;top:-17px;right:8px;z-index:4;background:var(--note);color:#fff;font-size:.72rem;font-weight:700;padding:3px 8px;border-radius:5px;white-space:nowrap;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis}
+@media (max-width:520px){.body{padding-left:16px}}
+@media (prefers-reduced-motion:reduce){.chev{transition:none}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <div class="concept">
+    <a class="backlink" href="index.html">← Back to the case study</a>
+    <span><b>Concept by Sana Ahmad</b> · IamExpat's pregnancy guide, restructured. Not an official IamExpat page.</span>
+    <button class="toggle" id="annotate" type="button" aria-pressed="false">Show what changed</button>
+  </div>
+
+  <header>
+    <p class="crumbs">Expat info › Family &amp; kids › Pregnancy</p>
+    <h1 data-note="E · Question-style title">Pregnant in Germany? Here's what to do, step by step</h1>
+    <div class="byline" data-note="F · Date and sources visible">
+      <span>Updated 25 Apr 2025</span>
+      <span>12 steps · sources named in each step</span>
+    </div>
+    <p class="lede">Germany has a very good system of pregnancy support, and health insurance covers everything from your first check-up to the birth itself. There is quite a bit to organise along the way, though, so we've put it in the order you'll need it.</p>
+  </header>
+
+  <section class="answer" data-note="A · Answer first" aria-labelledby="short">
+    <h2 id="short">Just found out? Start with these three things</h2>
+    <ol>
+      <li><b>Check your health insurance.</b> If you have German public or private insurance, you get the same maternity care as German nationals.</li>
+      <li><b>Book an appointment with a gynaecologist</b> (<i>Frauenarzt</i>). The first visit usually happens around week six.</li>
+      <li><b>Start looking for a midwife</b> (<i>Hebamme</i>) around weeks 12 to 15. Many can only take on a few clients at a time.</li>
+    </ol>
+    <p>Everything else is below, in order. Tap any step to read the full details.</p>
+  </section>
+
+  <nav class="jump" aria-label="Jump to a stage">
+    <a href="#st1">Right away</a><a href="#st2">Weeks 6–20</a><a href="#st3">Weeks 20–34</a><a href="#st4">Last weeks</a><a href="#docs">Documents</a>
+    <button type="button" id="openall">Open all steps</button>
+  </nav>
+
+  <section class="strip" aria-labelledby="glance">
+    <h2 id="glance">Your pregnancy at a glance</h2>
+    <div class="track" data-note="B · The order, at a glance">
+      <ol>
+        <li><b>Week 6</b><br>First gynaecologist visit and your <i>Mutterpass</i></li>
+        <li><b>Weeks 9–12</b><br>First ultrasound; ask for a pregnancy confirmation for work</li>
+        <li><b>Weeks 12–15</b><br>Find a midwife</li>
+        <li><b>Around month 5</b><br>Book a prenatal class and visit hospitals</li>
+        <li><b>From week 32</b><br>Check-ups every two weeks</li>
+        <li><b>6 weeks before</b><br>Maternity leave begins</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="stage" data-note="B · Numbered steps: short version visible, full detail on tap" aria-labelledby="st1">
+    <div class="stage-head"><span>Stage 1 · Right away</span><h2 id="st1">The first few weeks</h2></div>
+    <ol class="steps">
+
+      <li><details>
+        <summary><span class="num">1</span><h3>Am I covered by the right health insurance?</h3><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="when">Do this first</span><p class="gist">Public insurance covers check-ups through to the birth. With private cover, check what's included.</p><span class="more">Read more</span></summary>
+        <div class="body">
+          <p>Before anything else, make sure you are covered by German health insurance. This applies whether you are already pregnant or still planning.</p>
+          <ul>
+            <li><b>Public (statutory) insurance</b> gives expectant mothers comprehensive cover, from check-ups all the way to childbirth. You may pay extra for some choices, for example giving birth in a private hospital.</li>
+            <li><b>Private insurance:</b> ask your provider exactly what your policy covers.</li>
+            <li>As long as you have public or private cover, you have access to the same maternity services as German nationals.</li>
+            <li><b>Only in Germany for a short visit?</b> Your travel insurance or European Health Insurance Card (EHIC) may cover you.</li>
+          </ul>
+          <p class="src" data-note="F · Source named in every step">Source: Federal health portal (gesund.bund.de) · Full guides: <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/german-health-insurance">German health insurance</a>, <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/german-health-insurance/statutory-health-insurance-germany">Statutory health insurance</a>, <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/german-health-insurance/private-health-insurance-germany">Private health insurance</a></p>
+        </div>
+      </details></li>
+
+      <li><details>
+        <summary><span class="num">2</span><h3>How do I know if I'm pregnant?</h3><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="when">From the day your period is due</span><p class="gist">Home tests are sold in supermarkets and pharmacies and are around 98% accurate.</p><span class="more">Read more</span></summary>
+        <div class="body">
+          <p>You can buy a home pregnancy test at most supermarkets and pharmacies, and sometimes even from vending machines. From the first day your period is due, these tests are around 98% accurate. Your pharmacist can give you more advice.</p>
+          <h4>Emergency contraception</h4>
+          <p>If your contraception has failed, or after unprotected sex, the morning-after pill (<i>die Pille danach</i>) is available from pharmacies without a prescription. It costs between 18 and 35 euros. Outside opening hours, on weekends and on public holidays, you can get it from an emergency pharmacy. If you are under 22, it is free with a doctor's prescription.</p>
+          <p class="src">Full guide: <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/german-healthcare-system/pharmacies-medicine-germany">Pharmacies and medicine in Germany</a></p>
+        </div>
+      </details></li>
+
+      <li><details>
+        <summary><span class="num">3</span><h3>When should I see a gynaecologist?</h3><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="when">Around week 6</span><p class="gist">Book after a positive test. They confirm the pregnancy and estimate your due date.</p><span class="more">Read more</span></summary>
+        <div class="body">
+          <p>After a positive home test, book an appointment with a gynaecologist. You can go to your usual one or choose someone new. You can normally book directly, although some practices ask for a referral from your GP. Public insurance covers a yearly gynaecologist visit for every woman over 20 anyway.</p>
+          <p>At this first appointment, usually around week six, your gynaecologist confirms the pregnancy with a more accurate blood test and gives you a rough due date.</p>
+          <p class="terms"><b>Useful German:</b> <i>Frauenarzt / Frauenärztin</i> (gynaecologist) · <i>Entbindungstermin</i> (due date)</p>
+          <p class="src">Source: 116117 doctor search (116117.de) · Full guides: <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/german-healthcare-system/general-practitioners-gps-doctors-germany">GPs and doctors in Germany</a>, <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/german-healthcare-system">The German healthcare system</a></p>
+        </div>
+      </details></li>
+
+      <li><details>
+        <summary><span class="num">4</span><h3>What is the Mutterpass?</h3><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="when">At your first appointment</span><p class="gist">Your pregnancy record. Bring it to every appointment and to the hospital.</p><span class="more">Read more</span></summary>
+        <div class="body">
+          <p>At your first appointment you'll receive a <i>Mutterpass</i> (literally "mother's passport"). This booklet tracks your pregnancy and records your test results and examinations.</p>
+          <ul>
+            <li>Keep it somewhere safe.</li>
+            <li>Bring it to every appointment.</li>
+            <li>Take it with you to the hospital when you give birth.</li>
+          </ul>
+          <p class="src">Source: Federal health portal (gesund.bund.de) · Full guide: <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/family-kids/giving-birth-germany">Giving birth in Germany</a></p>
+        </div>
+      </details></li>
+    </ol>
+  </section>
+
+  <section class="stage" aria-labelledby="st2">
+    <div class="stage-head"><span>Stage 2 · Weeks 6–20</span><h2 id="st2">Early pregnancy</h2></div>
+    <ol class="steps">
+
+      <li><details>
+        <summary><span class="num">5</span><h3>What check-ups will I have?</h3><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="when">Throughout your pregnancy</span><p class="gist">About 12 check-ups and 3 routine ultrasounds. Your employer must give you time off for them.</p><span class="more">Read more</span></summary>
+        <div class="body">
+          <p>After your first appointment, you'll have around 12 regular check-ups with your gynaecologist or midwife: one every four weeks until week 32, then every two weeks. Your employer has to give you time off to attend.</p>
+          <h4>What happens at a check-up</h4>
+          <ul>
+            <li>Blood pressure, weight, and blood and urine samples</li>
+            <li>Checks for blood group and Rh factor</li>
+            <li>Tests for immunity to rubella and toxoplasmosis, and for gestational diabetes</li>
+            <li>Pelvic exams and ultrasounds</li>
+          </ul>
+          <p>Not every insurer covers every test, so check with your doctor and insurance company.</p>
+          <h4>Your three ultrasounds</h4>
+          <ul>
+            <li><b>Weeks 9–12:</b> confirms the pregnancy, checks the heartbeat and gives a more precise due date. If you work, ask for a pregnancy confirmation (<i>Schwangerschaftsbestätigung</i>) for your employer.</li>
+            <li><b>Weeks 19–22 and 29–32:</b> the doctor measures the baby's head, tummy and thigh and checks the position of the placenta.</li>
+          </ul>
+          <p>Your doctor should explain the pros and cons of each scan, and you can refuse one. Extra scans are only covered if they are medically necessary.</p>
+          <h4>Vaccinations</h4>
+          <p>Vaccinations are not mandatory, but your doctor may recommend the flu vaccine, whooping cough and a COVID booster to protect you and your baby.</p>
+          <p class="terms"><b>Useful German:</b> <i>Schwangerschaftsvorsorge</i> (prenatal care) · <i>Schwangerschaftsbestätigung</i> (pregnancy confirmation)</p>
+          <p class="src">Source: Federal health portal (gesund.bund.de) · Full guide: <a target="_blank" rel="noopener" href="https://www.iamexpat.de/career/working-in-germany/sick-holiday-maternity-leave">Sick, holiday and maternity leave</a></p>
+        </div>
+      </details></li>
+
+      <li><details>
+        <summary><span class="num">6</span><h3>Do I need a midwife?</h3><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="when">Weeks 12–15</span><p class="gist">Yes. Look early, as midwives book up fast. English-speaking midwives are common in big cities.</p><span class="more">Read more</span></summary>
+        <div class="body">
+          <p>During your pregnancy you'll start seeing a midwife (<i>Hebamme</i>) regularly. Midwives visit you at home, carry out check-ups and support you before, during and after the birth. A midwife is usually in charge at the birth itself, though it may not be the same one who visits you at home.</p>
+          <ul>
+            <li>You can choose your own midwife or be assigned one by your doctor.</li>
+            <li>Start looking around weeks 12 to 15, because many midwives only take a few clients at a time.</li>
+            <li>Look for someone who offers both prenatal and postnatal care, so they can also visit after the birth and help with feeding and caring for your baby.</li>
+          </ul>
+          <p class="terms"><b>Useful German:</b> <i>Hebamme</i> (midwife) · <i>Wochenbett</i> (the weeks after the birth)</p>
+          <p class="src">Find a midwife: <a target="_blank" rel="noopener" href="https://www.hebammensuche.de/">Hebammensuche</a>, a search tool you can filter by location, language and specialism</p>
+        </div>
+      </details></li>
+    </ol>
+  </section>
+
+  <section class="stage" aria-labelledby="st3">
+    <div class="stage-head"><span>Stage 3 · Weeks 20–34</span><h2 id="st3">Planning the birth</h2></div>
+    <ol class="steps">
+
+      <li><details>
+        <summary><span class="num">7</span><h3>Where can I give birth?</h3><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="when">Around month 5</span><p class="gist">In a hospital, a birth centre or at home. Visit an info evening, then pre-register.</p><span class="more">Read more</span></summary>
+        <div class="body">
+          <p>You have three options: a hospital, a birth centre (<i>Geburtshaus</i>) or a home birth.</p>
+          <ul>
+            <li>Most hospitals run an information evening (<i>Infoabend</i>) where you can see the facilities, meet the staff and ask questions.</li>
+            <li>Once you've decided, pre-register so everything is arranged in advance.</li>
+            <li><b>Bring:</b> your <i>Mutterpass</i>, your passport, possibly your birth certificate, and your marriage certificate if you are married.</li>
+          </ul>
+          <p class="src">Source: Federal health portal (gesund.bund.de) · Full guides: <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/german-healthcare-system/hospitals-germany">Hospitals in Germany</a>, <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/family-kids/giving-birth-germany">Giving birth in Germany</a></p>
+        </div>
+      </details></li>
+
+      <li><details>
+        <summary><span class="num">8</span><h3>When should I book a prenatal class?</h3><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="when">Register around month 5</span><p class="gist">Aim to finish 4 weeks before your due date. Insurance usually pays for you and your partner.</p><span class="more">Read more</span></summary>
+        <div class="body">
+          <p>Plan to complete a prenatal course (<i>Geburtsvorbereitung</i>) about four weeks before your due date. Courses fill up, so register two to three months ahead, around five months into your pregnancy.</p>
+          <ul>
+            <li>Your health insurer should reimburse the cost for you and your partner. Check first, and ask for an invoice.</li>
+            <li>Courses run at hospitals and through other providers such as the German Red Cross, and more are now online or hybrid.</li>
+            <li>There are courses for first-time parents and single parents, often in English, and some focus on methods such as Dick-Read, yoga or breathing techniques.</li>
+            <li>Your hospital or midwife can recommend local courses.</li>
+          </ul>
+          <p class="terms"><b>Useful German:</b> <i>Geburtsvorbereitungskurs</i> (prenatal class)</p>
+          <p class="src">Full guide: <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/family-kids/giving-birth-germany">Giving birth in Germany</a></p>
+        </div>
+      </details></li>
+
+      <li><details>
+        <summary><span class="num">9</span><h3>When do I tell my employer and health insurer?</h3><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="when">When you're ready</span><p class="gist">You don't have to, but maternity protection only applies once your employer knows.</p><span class="more">Read more</span></summary>
+        <div class="body">
+          <p>Your gynaecologist gives you a pregnancy confirmation for your employer and, later, a certificate with your expected due date.</p>
+          <ul>
+            <li>You're not obliged to tell your employer, but the maternity protection rules only apply once they know.</li>
+            <li>To take maternity leave and receive maternity benefit and parental allowance, give your employer the due-date certificate and inform your health insurer too.</li>
+            <li>Your employer must tell the health and safety authority, which then contacts you to check that your working conditions follow the Maternity Protection Act.</li>
+          </ul>
+          <p class="src">Source: Federal family portal (familienportal.de) · Full guides: <a target="_blank" rel="noopener" href="https://www.iamexpat.de/career/leave-time-off/maternity-leave-germany">Maternity leave</a>, <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/social-security/maternity-benefit-germany-mutterschaftsgeld">Maternity benefit</a></p>
+        </div>
+      </details></li>
+
+      <li><details>
+        <summary><span class="num">10</span><h3>We're not married. What do we need to do?</h3><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="when">Before the birth</span><p class="gist">The father should recognise paternity during pregnancy so he's on the birth certificate.</p><span class="more">Read more</span></summary>
+        <div class="body">
+          <p>In Germany, a man is only automatically the legal father if he is married to the mother when the child is born. If you're not married, your partner should recognise paternity during the pregnancy so he can be named on the birth certificate when you register the birth. It can be done afterwards, but then a new certificate has to be issued.</p>
+          <h4>Where to declare paternity</h4>
+          <ul>
+            <li>Your local youth welfare office (<i>Jugendamt</i>)</li>
+            <li>A registry office (<i>Standesamt</i>)</li>
+            <li>Your local court (<i>Amtsgericht</i>)</li>
+            <li>A notary</li>
+          </ul>
+          <p>The mother has to give her consent in person, and there may be a fee.</p>
+          <h4>Custody is separate</h4>
+          <p>Recognising paternity doesn't give the father custody. If the parents aren't married, only the mother has custody at first. You can arrange joint custody with a custody declaration at the youth welfare office or a notary, also before the birth.</p>
+          <h4>Married parents and donor conception</h4>
+          <p>If the mother is married, her spouse is automatically the legal parent. If a donor was used, the donor is not a legal parent; the legal parent is always the person who gave birth. For now, parents of children born via a donor or surrogate have to apply to adopt their child, although the law may change.</p>
+          <p class="terms"><b>Useful German:</b> <i>Vaterschaftsanerkennung</i> (paternity recognition) · <i>Sorgerechtserklärung</i> (custody declaration)</p>
+          <p class="src">Full guides: <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/family-kids/marriage-partnerships-germany">Marriage and partnerships</a>, <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/family-kids/birth-certificate-germany-geburtsurkunde">Birth certificates</a>, <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/family-kids/registering-birth-getting-birth-certificate-germany">Registering a birth</a></p>
+        </div>
+      </details></li>
+    </ol>
+  </section>
+
+  <section class="stage" aria-labelledby="st4">
+    <div class="stage-head"><span>Stage 4 · The last weeks</span><h2 id="st4">Before your baby arrives</h2></div>
+    <ol class="steps">
+
+      <li><details>
+        <summary><span class="num">11</span><h3>Should I start looking for a Kita now?</h3><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="when">Before the birth</span><p class="gist">Every child has a legal right to a place from 12 months, but places are scarce.</p><span class="more">Read more</span></summary>
+        <div class="body">
+          <p>School only starts at five or six, and before that there are several childcare options. Since 2013, every child aged 12 months or older has a legal right to a childcare place, partly or fully subsidised depending on your state.</p>
+          <p>Places in daycare (<i>Kita</i>) are in short supply in many cities, so it's worth looking into options before your baby is born.</p>
+          <p class="src">More on IamExpat: <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/family-kids/childcare-germany-kita-kindertagesstaette">Childcare in Germany</a> · <a target="_blank" rel="noopener" href="https://www.iamexpat.de/education/early-childhood-education">Early childhood education</a></p>
+        </div>
+      </details></li>
+
+      <li><details>
+        <summary><span class="num">12</span><h3>How does maternity leave work?</h3><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="when">6 weeks before your due date</span><p class="gist">From 6 weeks before the birth to 8 weeks after, on full pay if you're employed.</p><span class="more">Read more</span></summary>
+        <div class="body">
+          <p>In Germany, maternity leave (<i>Mutterschutz</i>) is more of a requirement than a right. It runs from six weeks before the birth to eight weeks after, and longer for multiple or premature births.</p>
+          <ul>
+            <li>If you're employed, you're still treated as an active employee and receive your full salary through maternity benefit (<i>Mutterschaftsgeld</i>).</li>
+            <li>Parental leave can follow. Your partner is entitled to it too.</li>
+            <li>Tell your employer and health insurer in advance, ideally several weeks before your leave starts.</li>
+          </ul>
+          <p class="src">Source: Federal family portal (familienportal.de) · Full guides: <a target="_blank" rel="noopener" href="https://www.iamexpat.de/career/leave-time-off/maternity-leave-germany">Maternity leave</a>, <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/social-security/maternity-benefit-germany-mutterschaftsgeld">Maternity benefit</a>, <a target="_blank" rel="noopener" href="https://www.iamexpat.de/career/leave-time-off/parental-leave-germany">Parental leave</a></p>
+        </div>
+      </details></li>
+    </ol>
+  </section>
+
+  <section class="docs" id="docs" aria-labelledby="docsh">
+    <h2 id="docsh">Documents you'll need</h2>
+    <ul>
+      <li><span>Proof of your health insurance <small>· step 1</small></span></li>
+      <li><span>Your <i>Mutterpass</i>, at every appointment and at the birth <small>· step 4</small></span></li>
+      <li><span>Pregnancy confirmation and due-date certificate, for your employer and insurer <small>· steps 5 and 9</small></span></li>
+      <li><span>Passport, birth certificate and marriage certificate (if married), to pre-register at the hospital <small>· step 7</small></span></li>
+      <li><span>The invoice for your prenatal class, to claim the cost back <small>· step 8</small></span></li>
+    </ul>
+  </section>
+
+  <section class="stage" data-note="D · What next" aria-labelledby="nx">
+    <div class="stage-head"><span>After the birth</span><h2 id="nx">What comes next</h2></div>
+    <div class="next">
+      <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/family-kids/giving-birth-germany"><b>Giving birth</b><span>What happens at the hospital</span></a>
+      <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/family-kids/registering-birth-getting-birth-certificate-germany"><b>Registering the birth</b><span>Getting a birth certificate</span></a>
+      <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/social-security/parental-allowance-germany-elterngeld"><b>Parental allowance</b><span>Applying for Elterngeld</span></a>
+      <a target="_blank" rel="noopener" href="https://www.iamexpat.de/expat-info/social-security/child-benefits-germany-kindergeld"><b>Child benefit</b><span>Applying for Kindergeld</span></a>
+      <a class="cta" target="_blank" rel="noopener" href="https://www.iamexpat.de/newsletters"><b>Get our newsletter</b><span>News and next steps for families, weekly</span></a>
+    </div>
+  </section>
+
+  <div class="helpful">Was this guide helpful? <span>Yes</span><span>No</span></div>
+
+  <footer>
+    <p>Concept prototype by Sana Ahmad, October 2026. All information comes from IamExpat's guide "Pregnancy in Germany" (updated 25 April 2025), restructured and lightly edited. Links point to IamExpat's own guides; official sources are named so readers and AI tools can see where facts come from. Facts were not re-checked for this concept. This is not medical or legal advice.</p>
+    <p>Every step's full text sits in the page itself, so Google and AI tools can read it even when a step is closed.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var btn=document.getElementById('annotate');
+  btn.addEventListener('click',function(){
+    var on=document.body.classList.toggle('annotate');
+    btn.setAttribute('aria-pressed',on?'true':'false');
+    btn.textContent=on?'Hide what changed':'Show what changed';
+  });
+  var all=document.getElementById('openall');
+  all.addEventListener('click',function(){
+    var d=document.querySelectorAll('details');
+    var open=all.getAttribute('data-open')!=='true';
+    d.forEach(function(x){x.open=open;});
+    all.setAttribute('data-open',open?'true':'false');
+    all.textContent=open?'Close all steps':'Open all steps';
+  });
+})();
+</script>
+
+</body>
+</html>
